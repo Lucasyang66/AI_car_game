@@ -1,0 +1,66 @@
+body{
+    margin:0;
+    background:darkgray;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+#MainCanvas{
+    background:lightgray;
+}
+#diagram{
+    background:black;
+}
+
+#Buttons{
+    display:flex;
+    flex-direction:column;
+}
+.button-container{
+    position: fixed;
+    bottom:20%;
+    left:15vw;
+    transform: translate(-50%);
+    display:flex;
+    flex-direction:row;
+}
+
+button{
+    border: none;
+    border-radius: 5px;
+    padding: 5px 5px 7px 5px;
+    margin: 2px;
+    cursor:pointer;
+}
+button:hover{
+    background:rgb(0, 140, 255);
+}
+
+.text-container{
+    position: fixed;
+    top:10%;
+    left:15vw;
+    transform: translate(-50%);
+}
+p{
+    font-size:3vw;
+    font-family: Monospace, Helvetica, sans-serif;
+    display:inline;
+}
+.button-container{
+    position: fixed;
+    bottom:20%; /* fixed position, change this to move it*/
+    left:15vw; /* fixed position, change this to move it*/
+    transform: translate(-50%);
+    display:flex;
+    flex-direction:row;
+}
+.button-container button{
+    width: 50px; /* Make the buttons wider */
+    height: 30px; /* Make the buttons shorter */
+    font-size:1.5vw; /*set a size for the text*/
+}
+.button-container p{
+    font-size:2vw; /*set the size of text*/
+}
