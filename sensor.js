@@ -1,9 +1,9 @@
 class Sensor{
     constructor(car){
         this.car=car;
-        this.rayCount=5;
-        this.rayLength=180;
-        this.raySpread=0.7;
+        this.rayCount=6;
+        this.rayLength=170;
+        this.raySpread=0.8;
 
         this.rays=[];
         this.raydistance=[];
@@ -39,7 +39,7 @@ class Sensor{
                 }
             }
         }
-
+        if(ray[1].y > bestCar.y + carCanvas.height) return null;
         if(touches.length==0){
             return null;
         }

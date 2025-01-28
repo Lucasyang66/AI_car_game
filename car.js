@@ -1,6 +1,6 @@
 
 class Car{
-    constructor(x,y,width,height,cartype,brain,stopcycle=0, otherBrain = null){
+    constructor(x,y,width,height,cartype,brain, otherBrain = null){
         this.x=x;
         this.y=y;
         this.score=0;
@@ -29,8 +29,7 @@ class Car{
         if(this.isAI){
             if (brain instanceof NeuralNetwork) {
                 this.brain = brain.copy();
-                if(stopcycle>3) this.brain.mutate(big_mutate);
-                else this.brain.mutate(mutate, otherBrain);
+                this.brain.mutate(mutate, otherBrain);
               } 
             else {
                 this.brain = new NeuralNetwork(this.sensors.rayCount, 8, 2);
@@ -76,8 +75,9 @@ class Car{
             this.damage=this.#assessDamage(RoadBorders,traffic);
         }
 
-        if(this.damage){
-            this.score-=500;
+        if (this.damage) {
+            this.score *= 0.8; 
+            this.score -= 200;
         }
         
         if(this.sensors){

@@ -9,16 +9,8 @@ const road = new Road(carCanvas.width/2,carCanvas.width*0.85,3);
 const score_element = document.getElementById("score_text");
 const hscore_element = document.getElementById("hscore_text");
 //const car = new Car(road.getLaneCenter(1),100 ,30 ,50, "AI");
-let traffic = [
-    new Car(road.getLaneCenter(1),-100,30,50,"npc"),
-    new Car(road.getLaneCenter(0),-300,30,50,"npc"),
-    new Car(road.getLaneCenter(2),-300,30,50,"npc"),
-    new Car(road.getLaneCenter(0),-500,30,50,"npc"),
-    new Car(road.getLaneCenter(1),-500,30,50,"npc"),
-    new Car(road.getLaneCenter(1),-700,30,50,"npc"),
-    new Car(road.getLaneCenter(2),-700,30,50,"npc"),
-];
-let base_cycles = 50;
+let traffic = [];
+let base_cycles = 10;
 let cycles = base_cycles;
 
 
@@ -27,11 +19,12 @@ let savedCars = [];
 let gcount=1;
 let stopcycle=0;
 
-const N=400;
+const N=350;
 let cars=generateCars(N);
 let bestCar=cars[0];
 let generations = [bestCar];
 
+let trafficYdis=250;
 
 
 function check_spawn(){
@@ -60,22 +53,21 @@ function game_restart(){
     car.angle=0;
     car.speed=0;
     traffic.length=0;
-    //spawn_traffic(500,false);
     spawn_traffictest();
     car.damage=false;
 }
 
 function spawn_traffictest(){
     traffic.push(new Car(road.getLaneCenter(1),bestCar.y-200,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(0),bestCar.y-400,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(2),bestCar.y-400,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(0),bestCar.y-600,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(1),bestCar.y-600,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(1),bestCar.y-800,30,50,"npc"));
-    traffic.push(new Car(road.getLaneCenter(2),bestCar.y-800,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(0),bestCar.y-200-trafficYdis,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(2),bestCar.y-200-trafficYdis,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(0),bestCar.y-200-trafficYdis*2,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(1),bestCar.y-200-trafficYdis*2,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(1),bestCar.y-200-trafficYdis*3,30,50,"npc"));
+    traffic.push(new Car(road.getLaneCenter(2),bestCar.y-200-trafficYdis*3,30,50,"npc"));
 }
-
-function spawn_traffic(y=200,b=true){
+spawn_traffictest();
+function spawn_traffic(y=trafficYdis,b=true){
     let vehicle_count=Math.round(Math.random())+road.TotalLane-2;
     let lane;
     let a=0;
@@ -125,7 +117,6 @@ function update(){
         //if(bestCar.score==3000) spawn_traffic();
         check_spawn();
     
-        console.log(bestCar.l,bestCar.r);
         //if(car.damage) game_restart();
         if(cars.length==0){
             gcount++;
@@ -137,14 +128,20 @@ function update(){
                   });
                 //console.log(bestCar.score);
                 //console.log(generations[0].score);
-                if(bestCar.score<=generations[2].score) stopcycle++;
-                else {stopcycle=0;}
-                console.log(stopcycle);
+                
                 generations.splice(0,1);
             }
-            hscore_element.innerHTML = Math.round(generations[generations.length-1].score)+500;
+            hscore_element.innerHTML = Math.round(generations[generations.length-1].score);
             let mutation_rate = 0.3/(gcount/50);
             if(mutation_rate < 0.005) mutation_rate = 0.005; 
+            if (gcount > 50 && generations.length > 3) {
+                let prevGenScore = generations[generations.length-2].score;
+                if (bestCar.score - prevGenScore < 10) {
+                mutation_rate = 0.5; // Increase rate if no improvement
+                }
+            }
+            
+            
             nextGeneration();
             console.log(generations);
 

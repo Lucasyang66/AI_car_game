@@ -39,10 +39,20 @@ class NeuralNetwork{
                     } else {
                       newx = values[j];
                   }
-                  let offset = randomGaussian() * 0.5; // Gaussian offset
-                    newx = newx + offset;
-                    values[j] = newx;
+
+                  if (random(1) < 0.2) { // 20% chance of weight replacement
+                    newx = random(-1,1);
                   }
+
+                  let offset = randomGaussian() * 0.5; // Gaussian offset
+                  newx = newx + offset;
+
+                  if(random(1)<0.1){ // 10% chance of zeroing the weight
+                    newx = 0;
+                  }
+                  
+                  values[j] = newx;
+                }
             }
             let newTensor = tf.tensor(values, shape);
             mutatedWeights[i] = newTensor;
