@@ -1,7 +1,5 @@
 const carCanvas=document.getElementById("MainCanvas");
 carCanvas.width=180;
-const increaseCyclesButton = document.getElementById("increaseCyclesButton");
-const decreaseCyclesButton = document.getElementById("decreaseCyclesButton");
 const cycle_element = document.getElementById("cycle_text");
 
 const carCtx = carCanvas.getContext("2d");
@@ -27,9 +25,51 @@ let generations = [bestCar];
 let trafficYdis=250;
 
 
-function check_spawn(){
-    if(traffic[traffic.length-1].y-traffic[0].y>=-800){
-        spawn_traffic();
+//save load model
+
+function saveBestModel() {
+    const modelData = bestCar.brain.serialize();
+    localStorage.setItem("savedBrain", modelData);
+    console.log("Model saved successfully");
+}
+
+function loadSavedModel(){
+    const savedData = localStorage.getItem("savedBrain");
+    if(savedData){
+        try{
+            const loadedBrain = NeuralNetwork.deserialize(savedData);
+            cars = [];
+            for(let i=0; i<N; i++){
+                cars.push(new Car(road.getLaneCenter(1),100,30,50,"AI",loadedBrain,null));
+            }
+            bestCar = cars[0];
+            gcount=0;
+            traffic = [];
+            generations.push(bestCar);
+            if(generations.length>3){
+                generations.sort((a, b) => {
+                    return a.score - b.score;
+                  });
+                //console.log(bestCar.score);
+                //console.log(generations[0].score);
+                
+                generations.splice(0,1);
+            }
+            hscore_element.innerHTML = Math.round(generations[generations.length-1].score);
+            let mutation_rate = 0.3/(gcount/50);
+            if(mutation_rate < 0.005) mutation_rate = 0.005; 
+            
+            
+            
+            //console.log(generations);
+            spawn_traffictest();
+            console.log("Model loaded successfully");
+        }catch(e) {
+            console.error("Failed to load model:", e);
+        }
+    }
+    else{
+        console.log("No saved model found");
     }
 }
 
@@ -39,10 +79,16 @@ function check_spawntest(){
     }
 }
 
+function check_spawn(){
+    if(traffic[traffic.length-1].y-traffic[0].y>=-800){
+        spawn_traffic();
+    }
+}
+
 function generateCars(N){
     const cars=[];
     for(let i=1;i<=N;i++){
-        cars.push(new Car(road.getLaneCenter(1),100,30,50,"AI",stopcycle));
+        cars.push(new Car(road.getLaneCenter(1),100,30,50,"AI",null,null));
     }
     return cars;
 }
@@ -89,10 +135,14 @@ function spawn_traffic(y=trafficYdis,b=true){
     }
 }
 //spawn_traffic(500,false);
+
 document.addEventListener('DOMContentLoaded', function() {
     const increaseCyclesButton = document.getElementById("increaseCyclesButton");
     const decreaseCyclesButton = document.getElementById("decreaseCyclesButton");
     const cycle_element = document.getElementById("cycle_text");
+    const saveBtn =  document.getElementById("saveBtn");
+    const loadBtn =  document.getElementById("loadBtn");
+    const importFile = document.getElementById("importFile");
     cycle_element.innerHTML = "Cycles: " + cycles;
     increaseCyclesButton.addEventListener("click", () => {
         base_cycles += 5;
@@ -107,17 +157,17 @@ document.addEventListener('DOMContentLoaded', function() {
         cycles = base_cycles;
        cycle_element.innerHTML = "Cycles: " + cycles;
     });
+    saveBtn.addEventListener("click", saveBestModel);
+    loadBtn.addEventListener("click", loadSavedModel);
+    importFile.addEventListener("change", importModel);
     animate();
 });
 
 
-
 function update(){
     for(let n=0; n<cycles; n++){
-        //if(bestCar.score==3000) spawn_traffic();
         check_spawn();
     
-        //if(car.damage) game_restart();
         if(cars.length==0){
             gcount++;
             traffic = [];
@@ -143,9 +193,8 @@ function update(){
             
             
             nextGeneration();
-            console.log(generations);
+            //console.log(generations);
 
-            //console.log(stopcycle);
             bestCar=cars[0];
             spawn_traffictest();
         }
@@ -191,6 +240,7 @@ function draw(){
     carCtx.globalAlpha=1;
     bestCar.draw(carCtx,true);
     carCtx.restore();
+
 }
 function animate(){
     update();

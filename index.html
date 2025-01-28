@@ -18,15 +18,26 @@
         <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js"></script>
         <script src="generation.js"></script>
         <script src="sensor.js"></script>
+        <script src="save.js"></script>
         <script src="function.js"></script>
         <script src="control.js"></script>
         <script src="road.js"></script>
         <script src="car.js"></script>
         <script src="main.js"></script>
+        
         <div class="button-container">
-            <button id="increaseCyclesButton">+</button>
-            <button id="decreaseCyclesButton">-</button>
-            <p id="cycle_text">Cycles: 50</p>
+            <div class="row">
+                <button id="increaseCyclesButton">+</button>
+                <button id="decreaseCyclesButton">-</button>
+                <p id="cycle_text">Cycles: 50</p>
+            </div>
+            <div class="row">
+                <button id="saveBtn">Save Model</button>
+                <button id="loadBtn">Load Model</button>
+                <input type="file" id="importFile" hidden accept=".json"/>
+                <button onclick="document.getElementById('importFile').click()">Import</button>
+                <button onclick="exportModel()">Export</button>
+            </div>
         </div>
     </body>
 </html>

@@ -1,5 +1,5 @@
 function nextGeneration() {
-    console.log('generation: ' + gcount);
+    //console.log('generation: ' + gcount);
     for (let i = 0; i < N; i++) {
       cars[i] = pickOne(i);
     }

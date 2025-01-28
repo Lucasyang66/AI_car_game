@@ -32,7 +32,7 @@ class Car{
                 this.brain.mutate(mutate, otherBrain);
               } 
             else {
-                this.brain = new NeuralNetwork(this.sensors.rayCount, 8, 2);
+                this.brain = new NeuralNetwork(this.sensors.rayCount, 9, 2);
               }
         }
 
@@ -45,6 +45,8 @@ class Car{
     think(offset){
         let outputs = this.brain.predict(offset);
         this.controls.forward=1;
+        //this.controls.left=outputs[0];
+        //this.controls.right=outputs[1];
         this.l=outputs[0];
         this.r=outputs[1];
         //if(outputs[0]<0.5) this.controls.left=1;
@@ -160,6 +162,8 @@ class Car{
             if(this.controls.right==true){
                 this.angle-=0.009*flip;
             }
+            //this.angle+=0.009*flip * this.controls.left;
+            //his.angle-=0.009*flip * this.controls.right;
         }
         this.x-=Math.sin(this.angle)*this.speed;
         this.y-=Math.cos(this.angle)*this.speed;

@@ -32,15 +32,7 @@ function mutate(x) {
     }
 }
 
-function big_mutate(x) {
-    if (random(1) < 0.3) {
-      let offset = randomGaussian() * 0.5;
-      let newx = x + offset;
-      return newx;
-    } else {
-      return x;
-    }
-}
+
 
 function polysIntersect(poly1, poly2){
     for(let i=0;i<poly1.length;i++){

@@ -1,67 +1,89 @@
-body{
-    margin:0;
-    background:darkgray;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-#MainCanvas{
-    background:lightgray;
-}
-#diagram{
-    background:black;
-}
-
-#Buttons{
-    display:flex;
-    flex-direction:column;
-}
-.button-container{
-    position: fixed;
-    bottom:20%;
-    left:15vw;
-    transform: translate(-50%);
-    display:flex;
-    flex-direction:row;
+body {
+    margin: 0;
+    background: darkgray;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-button{
-    border: none;
-    border-radius: 5px;
-    padding: 5px 5px 7px 5px;
-    margin: 2px;
-    cursor:pointer;
-}
-button:hover{
-    background:rgb(0, 140, 255);
+#MainCanvas {
+    background: lightgray;
 }
 
-.text-container{
-    position: fixed;
-    top:10%;
-    left:15vw;
-    transform: translate(-50%);
+#diagram {
+    background: black;
 }
-p{
-    font-size:3vw;
+
+#Buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    position: fixed;
+    bottom: 10%; /* Place at the bottom of the page */
+    left: 1%; 
+    transform: translate(0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px; /* Add space between buttons */
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-container .row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+button {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: white;
+    background: rgb(0, 120, 215);
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: rgb(0, 140, 255);
+}
+
+button:active {
+    background: rgb(0, 100, 180);
+}
+
+.text-container {
+    position: fixed;
+    top: 5%; /* Move higher for better visibility */
+    left: 10%; /* Center horizontally */
+    transform: translate(-50%, 0);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+p {
+    font-size: 1.2rem;
     font-family: Monospace, Helvetica, sans-serif;
-    display:inline;
+    margin: 5px 0;
+    color: #333;
 }
-.button-container{
-    position: fixed;
-    bottom:20%; /* fixed position, change this to move it*/
-    left:15vw; /* fixed position, change this to move it*/
-    transform: translate(-50%);
-    display:flex;
-    flex-direction:row;
-}
-.button-container button{
-    width: 50px; /* Make the buttons wider */
-    height: 30px; /* Make the buttons shorter */
-    font-size:1.5vw; /*set a size for the text*/
-}
-.button-container p{
-    font-size:2vw; /*set the size of text*/
+
+.button-container button {
+    width: auto; /* Allow buttons to size based on content */
+    height: auto;
+    font-size: 1rem;
+    padding: 10px 20px;
 }

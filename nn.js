@@ -90,7 +90,7 @@ class NeuralNetwork {
     this.learning_rate = learning_rate;
   }
 
-  setActivationFunctionHidden(func=step) {
+  setActivationFunctionHidden(func=relu) {
     this.activation_hidden = func;
   }
 
@@ -157,19 +157,43 @@ class NeuralNetwork {
   }
 
   serialize() {
-    return JSON.stringify(this);
+    return JSON.stringify({
+      input_nodes: this.input_nodes,
+      hidden_nodes: this.hidden_nodes,
+      output_nodes: this.output_nodes,
+      weights_ih: this.weights_ih.serialize(),
+      weights_ho: this.weights_ho.serialize(),
+      bias_h: this.bias_h.serialize(),
+      bias_o: this.bias_o.serialize(),
+      activation_hidden: this.activation_hidden.func.name,
+      activation_output: this.activation_output.func.name
+    });
   }
 
   static deserialize(data) {
-    if (typeof data == 'string') {
+    if (typeof data === 'string') {
       data = JSON.parse(data);
     }
+    const activationFunctions = {
+      sigmoid: sigmoid,
+      tanh: tanh,
+      relu: relu,
+      step: step
+  };
     let nn = new NeuralNetwork(data.input_nodes, data.hidden_nodes, data.output_nodes);
     nn.weights_ih = Matrix.deserialize(data.weights_ih);
     nn.weights_ho = Matrix.deserialize(data.weights_ho);
     nn.bias_h = Matrix.deserialize(data.bias_h);
     nn.bias_o = Matrix.deserialize(data.bias_o);
-    nn.learning_rate = data.learning_rate;
+
+    nn.setActivationFunctionHidden(
+      activationFunctions[data.activation_hidden] || relu
+    );
+
+    nn.setActivationFunctionOutput(
+      activationFunctions[data.activation_output] || step
+    );
+
     return nn;
   }
 
